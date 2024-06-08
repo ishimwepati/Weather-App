@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <p>Enter a city name to get the weather:</p>
+        <input type="text" id="cityInput" placeholder="Enter city name">
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="weatherInfo"></div>
+    </div>
+    <script>
+        function getWeather() {
+            const city = document.getElementById("cityInput").value;
+            const apiKey = "YOUR_API_KEY";
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const weatherInfo = document.getElementById("weatherInfo");
+                    weatherInfo.innerHTML = `
+                        <h2>${data.name}</h2>
+                        <p>${data.weather[0].description}</p>
+                        <p>Temperature: ${data.main.temp}°C</p>
+                        <p>Humidity: ${data.main.humidity}%</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error("Error fetching weather data:", error);
+                    const weatherInfo = document.getElementById("weatherInfo");
+                    weatherInfo.innerHTML = "<p>Failed to fetch weather data. Please try again later.</p>";
+                });
+        }
+    </script>
+</body>
+</html>
